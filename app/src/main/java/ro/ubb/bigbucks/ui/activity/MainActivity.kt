@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import ro.ubb.bigbucks.model.Expense
 import ro.ubb.bigbucks.model.Recurrence
+import ro.ubb.bigbucks.ui.component.DeleteExpensePopup
 import ro.ubb.bigbucks.ui.component.ExpenseDetailsPopup
 import ro.ubb.bigbucks.ui.component.ExpenseList
 import ro.ubb.bigbucks.ui.theme.BigBucksTheme
@@ -85,13 +86,17 @@ fun Body() {
         mutableStateOf<Expense?>(null)
     }
 
+    val expenseToDelete = remember {
+        mutableStateOf<Expense?>(null)
+    }
+
     ExpenseList(
         expenses,
         onCardDetailsClick = { expense ->
             selectedExpense.value = expense
         },
         onCardDeleteClick = { expense ->
-            expenses.remove(expense)
+            expenseToDelete.value = expense
         }
     )
 
@@ -99,6 +104,15 @@ fun Body() {
         ExpenseDetailsPopup(
             expense = selectedExpense.value!!,
             onDismissRequest = { selectedExpense.value = null }
+        )
+    } else if (expenseToDelete.value != null) {
+        DeleteExpensePopup(
+            onConfirm = {
+                val expenseToDeleteId = expenseToDelete.value!!.id
+                expenses.removeIf { expense -> expense.id == expenseToDeleteId }
+                expenseToDelete.value = null
+            },
+            onDismiss = { expenseToDelete.value = null }
         )
     }
 }
