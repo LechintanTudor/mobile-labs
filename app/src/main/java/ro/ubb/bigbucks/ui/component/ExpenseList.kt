@@ -11,7 +11,7 @@ import ro.ubb.bigbucks.model.Expense
 @Composable
 fun ExpenseList(
     expenses: List<Expense>,
-    onCardDetailsClick: (Expense) -> Unit,
+    onCardEditClick: (Expense) -> Unit,
     onCardDeleteClick: (Expense) -> Unit,
 ) {
     LazyColumn(
@@ -26,8 +26,9 @@ fun ExpenseList(
 
         items(expenses) { expense ->
             ExpenseCard(expense,
-                onDetailsClick = onCardDetailsClick,
-                onDeleteClick = onCardDeleteClick)
+                onEditClick = onCardEditClick,
+                onDeleteClick = onCardDeleteClick,
+            )
         }
 
         item {

@@ -18,7 +18,7 @@ import ro.ubb.bigbucks.model.Expense
 @Composable
 fun ExpenseCard(
     expense: Expense,
-    onDetailsClick: (Expense) -> Unit,
+    onEditClick: (Expense) -> Unit,
     onDeleteClick: (Expense) -> Unit,
 ) {
     val expanded = remember {
@@ -71,7 +71,7 @@ fun ExpenseCard(
                             .height(50.dp)
                             .weight(1f),
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
-                        onClick = { onDetailsClick(expense) },
+                        onClick = { onEditClick(expense) },
                     ) {
                         Text("Details...")
                     }

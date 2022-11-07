@@ -12,10 +12,15 @@ import androidx.compose.ui.unit.dp
 import ro.ubb.bigbucks.model.Expense
 import ro.ubb.bigbucks.model.Recurrence
 import ro.ubb.bigbucks.ui.content.AddExpenseBody
+import ro.ubb.bigbucks.ui.content.EditExpenseBody
 import ro.ubb.bigbucks.ui.content.ExpenseListBody
 import ro.ubb.bigbucks.ui.content.ExpenseListFab
 import ro.ubb.bigbucks.ui.theme.BigBucksTheme
 import java.util.*
+
+enum class AppState {
+    EXPENSE_LIST, ADD_EXPENSE, EDIT_EXPENSE,
+}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +36,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainContent() {
-    var appState by remember { mutableStateOf(0) }
+    var appState by remember { mutableStateOf(AppState.EXPENSE_LIST) }
 
     val expenses = remember {
         mutableStateListOf(
@@ -41,38 +46,52 @@ fun MainContent() {
         )
     }
 
-    Scaffold(
-        topBar = { TopBar() },
-        content = {
-            when (appState) {
-                0 -> {
-                    ExpenseListBody(expenses, onExpenseDelete = { expenseId ->
+    var selectedExpense by remember { mutableStateOf<Expense?>(null) }
+
+    Scaffold(topBar = { TopBar() }, content = {
+        when (appState) {
+            AppState.EXPENSE_LIST -> {
+                ExpenseListBody(
+                    expenses,
+                    onExpenseEdit = { expense ->
+                        selectedExpense = expense
+                        appState = AppState.EDIT_EXPENSE
+                    },
+                    onExpenseDelete = { expenseId ->
                         expenses.removeIf { expense -> expense.id == expenseId }
-                    })
-                }
-                1 -> {
-                    AddExpenseBody(
-                        onSave = { expense ->
-                            expenses.add(expense)
-                            appState = 0
-                        },
-                        onCancel = {
-                            appState = 0
-                        }
-                    )
-                }
+                    },
+                )
             }
-        },
-        floatingActionButton = {
-            when (appState) {
-                0 -> {
-                    ExpenseListFab {
-                        appState = 1
-                    }
-                }
+            AppState.ADD_EXPENSE -> {
+                AddExpenseBody(onSave = { expense ->
+                    expenses.add(expense)
+                    appState = AppState.EXPENSE_LIST
+                }, onCancel = {
+                    appState = AppState.EXPENSE_LIST
+                })
+            }
+            AppState.EDIT_EXPENSE -> {
+                EditExpenseBody(
+                    expense = selectedExpense!!,
+                    onSave = { editedExpense ->
+                        expenses.removeIf { expense -> expense.id == editedExpense.id }
+                        expenses.add(editedExpense)
+                        appState = AppState.EXPENSE_LIST
+                    },
+                    onCancel = { appState = AppState.EXPENSE_LIST },
+                )
             }
         }
-    )
+    }, floatingActionButton = {
+        when (appState) {
+            AppState.EXPENSE_LIST -> {
+                ExpenseListFab {
+                    appState = AppState.ADD_EXPENSE
+                }
+            }
+            else -> {}
+        }
+    })
 }
 
 @Composable
