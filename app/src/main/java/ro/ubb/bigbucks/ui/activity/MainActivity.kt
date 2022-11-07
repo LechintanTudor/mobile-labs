@@ -3,13 +3,12 @@ package ro.ubb.bigbucks.ui.activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ro.ubb.bigbucks.model.Expense
 import ro.ubb.bigbucks.model.Recurrence
@@ -34,12 +33,37 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun TopBar() {
-    TopAppBar(modifier = Modifier.height(80.dp), title = { Text("BIG BUCK$") }, navigationIcon = {
-        Icon(
-            Icons.Filled.Menu,
-            contentDescription = "Menu",
-        )
-    }, elevation = 10.dp)
+    val tabs = ArrayList<String>()
+    tabs.add("Expenses")
+    tabs.add("Status")
+
+    Card(elevation = 10.dp) {
+        Column {
+            TopAppBar(
+                title = { Text("BIG BUCK$") },
+                navigationIcon = {
+                    Icon(
+                        Icons.Filled.Menu,
+                        contentDescription = "Menu",
+                    )
+                },
+            )
+            MyTabRow(tabs, 0)
+        }
+    }
+}
+
+@Composable
+fun MyTabRow(tabs: List<String>, selectedTabIndex: Int) {
+    TabRow(selectedTabIndex) {
+        tabs.forEachIndexed { index, tabTitle ->
+            Tab(
+                selected = index == selectedTabIndex,
+                onClick = {},
+                text = { Text(tabTitle) },
+            )
+        }
+    }
 }
 
 @Composable
