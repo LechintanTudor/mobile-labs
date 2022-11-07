@@ -35,14 +35,16 @@ fun AddExpenseBody(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Button(
+                modifier = Modifier.weight(1f),
                 onClick = onCancel,
             ) {
                 Text("CANCEL")
             }
             Button(
+                modifier = Modifier.weight(1f),
                 enabled = name.text.isNotBlank(),
                 onClick = {
                     val expense = Expense(

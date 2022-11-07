@@ -30,14 +30,18 @@ fun EditExpenseBody(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Button(
+                modifier = Modifier.weight(1f),
                 onClick = onCancel,
             ) {
                 Text("CANCEL")
             }
-            Button(enabled = name.text.isNotBlank(), onClick = {
+            Button(
+                modifier = Modifier.weight(1f),
+                enabled = name.text.isNotBlank(),
+                onClick = {
                 onSave(expense.copy(name = name.text))
             }) {
                 Text("SAVE")
