@@ -7,3 +7,4 @@ enum class Recurrence {
     YEARLY,
     ONE_TIME,
 }
+
