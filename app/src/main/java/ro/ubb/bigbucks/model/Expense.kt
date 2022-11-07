@@ -1,6 +1,8 @@
 package ro.ubb.bigbucks.model
 
-import java.util.Date
+import android.icu.text.DateFormat
+import java.io.Serializable
+import java.util.*
 
 data class Expense(
     val id: UInt,
@@ -9,4 +11,14 @@ data class Expense(
     val value: UInt,
     val startDate: Date,
     val endDate: Date?,
-)
+) : Serializable {
+    fun subtitleText(): String {
+        return when (recurrence) {
+            Recurrence.DAILY -> "daily"
+            Recurrence.WEEKLY -> "weekly"
+            Recurrence.MONTHLY -> "monthly"
+            Recurrence.YEARLY -> "yearly"
+            Recurrence.ONE_TIME -> DateFormat.getDateInstance().format(startDate)
+        }
+    }
+}

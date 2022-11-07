@@ -9,11 +9,15 @@ import androidx.compose.ui.unit.dp
 import ro.ubb.bigbucks.model.Expense
 
 @Composable
-fun ExpenseList(expenses: List<Expense>) {
+fun ExpenseList(
+    expenses: List<Expense>,
+    onCardDetailsClick: (Expense) -> Unit,
+    onCardDeleteClick: (Expense) -> Unit,
+) {
     LazyColumn(
         modifier = Modifier
-            .padding(horizontal = 8.dp)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(horizontal = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         item {
@@ -21,7 +25,9 @@ fun ExpenseList(expenses: List<Expense>) {
         }
 
         items(expenses) { expense ->
-            ExpenseCard(expense)
+            ExpenseCard(expense,
+                onDetailsClick = onCardDetailsClick,
+                onDeleteClick = onCardDeleteClick)
         }
 
         item {
