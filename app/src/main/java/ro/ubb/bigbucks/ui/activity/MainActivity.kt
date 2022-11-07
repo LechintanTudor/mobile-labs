@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.unit.dp
 import ro.ubb.bigbucks.model.Expense
 import ro.ubb.bigbucks.model.Recurrence
+import ro.ubb.bigbucks.ui.content.AddExpenseBody
 import ro.ubb.bigbucks.ui.content.ExpenseListBody
 import ro.ubb.bigbucks.ui.content.ExpenseListFab
 import ro.ubb.bigbucks.ui.theme.BigBucksTheme
@@ -43,13 +44,32 @@ fun MainContent() {
     Scaffold(
         topBar = { TopBar() },
         content = {
-            ExpenseListBody(expenses, onExpenseDelete = { expenseId ->
-                expenses.removeIf { expense -> expense.id == expenseId }
-            })
+            when (appState) {
+                0 -> {
+                    ExpenseListBody(expenses, onExpenseDelete = { expenseId ->
+                        expenses.removeIf { expense -> expense.id == expenseId }
+                    })
+                }
+                1 -> {
+                    AddExpenseBody(
+                        onSave = { expense ->
+                            expenses.add(expense)
+                            appState = 0
+                        },
+                        onCancel = {
+                            appState = 0
+                        }
+                    )
+                }
+            }
         },
         floatingActionButton = {
-            ExpenseListFab {
-                appState = 1
+            when (appState) {
+                0 -> {
+                    ExpenseListFab {
+                        appState = 1
+                    }
+                }
             }
         }
     )
