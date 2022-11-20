@@ -1,6 +1,7 @@
 import 'package:big_bucks_app/model/recurrence.dart';
+import 'package:equatable/equatable.dart';
 
-class Expense {
+class Expense extends Equatable {
   final int id;
   final String name;
   final int value;
@@ -8,7 +9,7 @@ class Expense {
   final DateTime startDate;
   final DateTime? endDate;
 
-  Expense({
+  const Expense({
     this.id = 0,
     required this.name,
     required this.value,
@@ -34,4 +35,7 @@ class Expense {
       endDate: endDate ?? this.endDate,
     );
   }
+
+  @override
+  List<Object?> get props => [id, name, value, recurrence, startDate, endDate];
 }

@@ -6,7 +6,7 @@ class ExpenseRepository {
   final List<Expense> _expenses = [];
   int _lastGeneratedId = 0;
 
-  int add(Expense expense) {
+  Expense add(Expense expense) {
     if (expense.id != 0) {
       throw AddExpenseError();
     }
@@ -14,8 +14,9 @@ class ExpenseRepository {
     var id = _lastGeneratedId + 1;
     _lastGeneratedId += 1;
 
-    _expenses.add(expense.copyWith(id: id));
-    return id;
+    var newExpense = expense.copyWith(id: id);
+    _expenses.add(newExpense);
+    return newExpense;
   }
 
   Expense? getById(int id) {
