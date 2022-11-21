@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-class EditExpenseForm extends StatefulWidget {
+class ExpenseForm extends StatefulWidget {
   final Expense? _expense;
   final void Function(Expense expense)? _onApplyPressed;
   final void Function()? _onCancelPressed;
 
-  const EditExpenseForm({
+  const ExpenseForm({
     super.key,
     Expense? expense,
     void Function(Expense expense)? onApplyPressed,
@@ -19,10 +19,10 @@ class EditExpenseForm extends StatefulWidget {
         _onCancelPressed = onCancelPressed;
 
   @override
-  EditExpenseFormState createState() => EditExpenseFormState();
+  ExpenseFormState createState() => ExpenseFormState();
 }
 
-class EditExpenseFormState extends State<EditExpenseForm> {
+class ExpenseFormState extends State<ExpenseForm> {
   late String _name;
   late String _valueStr;
   late Recurrence _recurrence;

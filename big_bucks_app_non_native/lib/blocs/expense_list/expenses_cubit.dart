@@ -40,9 +40,8 @@ class ExpenseListCubit extends Cubit<ExpenseListState> {
 
   void deleteExpenseById(int expenseId) {
     if (_expenseRepository.deleteById(expenseId)) {
-      var expenses = state.expenses
-          .takeWhile((expense) => expense.id != expenseId)
-          .toList();
+      var expenses = [...state.expenses];
+      expenses.retainWhere((expense) => expense.id != expenseId);
 
       var selectedExpenseId =
           state.selectedExpenseId != expenseId ? state.selectedExpenseId : null;

@@ -12,6 +12,12 @@ class ExpenseListPage extends StatelessWidget {
         title: const Text("BIG BUCK\$"),
       ),
       body: const ExpenseListContainer(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, '/add-expense');
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

@@ -20,7 +20,13 @@ class ExpenseRepository {
   }
 
   Expense? getById(int id) {
-    return _expenses.firstWhere((expense) => expense.id == id);
+    for (var expense in _expenses) {
+      if (expense.id == id) {
+        return expense;
+      }
+    }
+
+    return null;
   }
 
   List<Expense> getAll() {

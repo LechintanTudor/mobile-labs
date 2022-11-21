@@ -1,5 +1,6 @@
 import 'package:big_bucks_app/blocs/expense_list/expenses_cubit.dart';
 import 'package:big_bucks_app/components/containers/expense_list_container.dart';
+import 'package:big_bucks_app/components/pages/add_expense_page.dart';
 import 'package:big_bucks_app/components/pages/edit_expense_page.dart';
 import 'package:big_bucks_app/components/pages/expense_list_page.dart';
 import 'package:big_bucks_app/data/expense_repository.dart';
@@ -17,19 +18,19 @@ class BigBucksApp extends StatelessWidget {
 
   BigBucksApp({super.key}) {
     _expenseRepository.add(Expense(
-      name: "Electricity",
+      name: 'Electricity',
       value: 100,
       recurrence: Recurrence.monthly,
       startDate: DateTime.now(),
     ));
     _expenseRepository.add(Expense(
-      name: "Rent",
+      name: 'Rent',
       value: 800,
       recurrence: Recurrence.monthly,
       startDate: DateTime.now(),
     ));
     _expenseRepository.add(Expense(
-      name: "Groceries",
+      name: 'Groceries',
       value: 300,
       recurrence: Recurrence.daily,
       startDate: DateTime.now(),
@@ -46,6 +47,7 @@ class BigBucksApp extends StatelessWidget {
         title: 'BIG BUCK\$',
         home: const ExpenseListPage(),
         routes: <String, WidgetBuilder>{
+          '/add-expense': (context) => const AddExpensePage(),
           '/edit-expense': (context) => const EditExpensePage(),
         },
       ),

@@ -1,7 +1,7 @@
 import 'package:big_bucks_app/blocs/expense_list/expenses_cubit.dart';
 import 'package:big_bucks_app/blocs/expense_list/expenses_state.dart';
 import 'package:big_bucks_app/components/presentational/expense_list.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ExpenseListContainer extends StatelessWidget {
@@ -23,9 +23,25 @@ class ExpenseListContainer extends StatelessWidget {
             expenseListCubit.selectExpenseById(expenseId);
             Navigator.pushNamed(context, '/edit-expense');
           },
-          onDeletePressed: (expenseId) {
-            debugPrint('Delete $expenseId');
-          },
+          onDeletePressed: (expenseId) => showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Delete expense #$expenseId?'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('CANCEL'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    expenseListCubit.deleteExpenseById(expenseId);
+                    Navigator.pop(context);
+                  },
+                  child: const Text('DELETE'),
+                ),
+              ],
+            ),
+          ),
         );
       },
     );
