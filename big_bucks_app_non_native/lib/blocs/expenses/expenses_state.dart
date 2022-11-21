@@ -9,7 +9,7 @@ class ExpensesState extends Equatable {
 
   const ExpensesState({
     this.expenses = const <Expense>[],
-    this.selectedExpenseId = 0,
+    this.selectedExpenseId = 1,
   });
 
   ExpensesState copyWith({List<Expense>? expenses, int? selectedExpenseId}) {
@@ -21,4 +21,8 @@ class ExpensesState extends Equatable {
 
   @override
   List<Object?> get props => [expenses, selectedExpenseId];
+
+  Expense? findSelectedExpense() {
+    return expenses.firstWhere((expense) => expense.id == selectedExpenseId);
+  }
 }

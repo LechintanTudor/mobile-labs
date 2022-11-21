@@ -22,14 +22,34 @@ class ExpensesCubit extends Cubit<ExpensesState> {
     ));
   }
 
+  void updateExpense(Expense expense) {
+    if (_expenseRepository.update(expense)) {
+      var expenses = state.expenses.map(
+        (oldExpense) {
+          if (oldExpense.id != expense.id) {
+            return oldExpense;
+          } else {
+            return expense;
+          }
+        },
+      ).toList();
+
+      emit(state.copyWith(expenses: expenses));
+    }
+  }
+
   void deleteExpenseById(int expenseId) {
     if (_expenseRepository.deleteById(expenseId)) {
+      var expenses = state.expenses
+          .takeWhile((expense) => expense.id != expenseId)
+          .toList();
+
+      var selectedExpenseId =
+          state.selectedExpenseId != expenseId ? state.selectedExpenseId : null;
+
       emit(state.copyWith(
-        expenses:
-            state.expenses.takeWhile((value) => value.id != expenseId).toList(),
-        selectedExpenseId: state.selectedExpenseId != expenseId
-            ? state.selectedExpenseId
-            : null,
+        expenses: expenses,
+        selectedExpenseId: selectedExpenseId,
       ));
     }
   }

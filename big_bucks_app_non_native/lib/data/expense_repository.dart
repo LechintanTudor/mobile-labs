@@ -31,6 +31,18 @@ class ExpenseRepository {
     return _expenses.any((expense) => expense.id == id);
   }
 
+  bool update(Expense expense) {
+    var index =
+        _expenses.indexWhere((oldExpense) => oldExpense.id == expense.id);
+
+    if (index == -1) {
+      return false;
+    }
+
+    _expenses[index] = expense;
+    return true;
+  }
+
   bool deleteById(int id) {
     var initialLength = _expenses.length;
     _expenses.removeWhere((expense) => expense.id == id);

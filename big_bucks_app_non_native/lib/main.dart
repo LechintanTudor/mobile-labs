@@ -1,5 +1,7 @@
 import 'package:big_bucks_app/blocs/expenses/expenses_cubit.dart';
 import 'package:big_bucks_app/components/containers/expense_list_container.dart';
+import 'package:big_bucks_app/components/pages/edit_expense_page.dart';
+import 'package:big_bucks_app/components/pages/expense_list_page.dart';
 import 'package:big_bucks_app/data/expense_repository.dart';
 import 'package:big_bucks_app/model/expense.dart';
 import 'package:big_bucks_app/model/recurrence.dart';
@@ -36,19 +38,16 @@ class BigBucksApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'BIG BUCK\$',
-      home: BlocProvider(
-        create: (context) {
-          return ExpensesCubit(_expenseRepository)..getAllExpenses();
+    return BlocProvider(
+      create: (context) {
+        return ExpensesCubit(_expenseRepository)..getAllExpenses();
+      },
+      child: MaterialApp(
+        title: 'BIG BUCK\$',
+        home: const ExpenseListPage(),
+        routes: <String, WidgetBuilder>{
+          '/edit-expense': (context) => const EditExpensePage(),
         },
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.green,
-            title: const Text('BIG BUCK\$'),
-          ),
-          body: const ExpenseListContainer(),
-        ),
       ),
     );
   }

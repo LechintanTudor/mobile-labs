@@ -11,15 +11,17 @@ class ExpenseListContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ExpensesCubit, ExpensesState>(
       builder: (context, state) {
+        var expensesCubit = context.read<ExpensesCubit>();
+
         return ExpenseList(
           expenses: state.expenses,
           selectedExpenseId: state.selectedExpenseId,
           onCardPressed: (expenseId) {
-            var expensesCubit = context.read<ExpensesCubit>();
             expensesCubit.toggleSelectExpenseById(expenseId);
           },
           onEditPressed: (expenseId) {
-            debugPrint('Edit $expenseId');
+            expensesCubit.selectExpenseById(expenseId);
+            Navigator.pushNamed(context, '/edit-expense');
           },
           onDeletePressed: (expenseId) {
             debugPrint('Delete $expenseId');
