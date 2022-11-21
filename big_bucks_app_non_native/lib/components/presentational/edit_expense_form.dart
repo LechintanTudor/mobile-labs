@@ -1,17 +1,78 @@
 import 'package:big_bucks_app/model/expense.dart';
+import 'package:big_bucks_app/model/recurrence.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
-class EditExpenseForm extends StatelessWidget {
-  final Expense _expense;
+class EditExpenseForm extends StatefulWidget {
+  final Expense? _expense;
+  final void Function(Expense expense)? _onApplyPressed;
+  final void Function()? _onCancelPressed;
 
   const EditExpenseForm({
     super.key,
-    required Expense expense,
-  }) : _expense = expense;
+    Expense? expense,
+    void Function(Expense expense)? onApplyPressed,
+    void Function()? onCancelPressed,
+  })  : _expense = expense,
+        _onApplyPressed = onApplyPressed,
+        _onCancelPressed = onCancelPressed;
+
+  @override
+  EditExpenseFormState createState() => EditExpenseFormState();
+}
+
+class EditExpenseFormState extends State<EditExpenseForm> {
+  late String _name;
+  late String _valueStr;
+  late Recurrence _recurrence;
+  late String _startDateStr;
+
+  @override
+  void initState() {
+    super.initState();
+
+    var expense = widget._expense;
+    var dateFormat = DateFormat('yyyy-MM-dd');
+
+    _name = expense?.name ?? '';
+    _valueStr = expense?.value.toString() ?? '0';
+    _recurrence = expense?.recurrence ?? Recurrence.oneTime;
+    _startDateStr = dateFormat.format(expense?.startDate ?? DateTime.now());
+  }
+
+  Expense? _getExpense() {
+    var name = _name.trim();
+
+    if (name.isEmpty) {
+      return null;
+    }
+
+    try {
+      var value = int.parse(_valueStr);
+
+      if (value <= 0) {
+        return null;
+      }
+
+      var startDate = DateFormat('yyyy-MM-dd').parse(_startDateStr);
+
+      return Expense(
+        id: widget._expense?.id ?? 0,
+        name: name,
+        value: value,
+        recurrence: _recurrence,
+        startDate: startDate,
+      );
+    } catch (error) {
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    var expense = _getExpense();
+
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -20,9 +81,64 @@ class EditExpenseForm extends StatelessWidget {
             child: Column(
               children: [
                 TextFormField(
-                  initialValue: _expense.name,
+                  onChanged: (name) => setState(() {
+                    _name = name;
+                  }),
+                  initialValue: _name,
                   decoration: const InputDecoration(
-                    hintText: "Expense name:",
+                    labelText: 'Name',
+                  ),
+                ),
+                TextFormField(
+                  onChanged: (valueStr) => setState(() {
+                    _valueStr = valueStr;
+                  }),
+                  initialValue: _valueStr,
+                  decoration: const InputDecoration(
+                    labelText: 'Value',
+                  ),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                ),
+                DropdownButtonFormField(
+                  onChanged: (recurrence) => setState(() {
+                    if (recurrence != null) {
+                      _recurrence = recurrence;
+                    }
+                  }),
+                  value: _recurrence,
+                  items: const <DropdownMenuItem<Recurrence>>[
+                    DropdownMenuItem(
+                      value: Recurrence.oneTime,
+                      child: Text('one time'),
+                    ),
+                    DropdownMenuItem(
+                      value: Recurrence.daily,
+                      child: Text('daily'),
+                    ),
+                    DropdownMenuItem(
+                      value: Recurrence.weeky,
+                      child: Text('weekly'),
+                    ),
+                    DropdownMenuItem(
+                      value: Recurrence.monthly,
+                      child: Text('monhtly'),
+                    ),
+                  ],
+                  decoration: const InputDecoration(
+                    labelText: 'Recurrence',
+                  ),
+                ),
+                TextFormField(
+                  onChanged: (startDateStr) => setState(() {
+                    _startDateStr = startDateStr;
+                  }),
+                  initialValue: _startDateStr,
+                  keyboardType: TextInputType.datetime,
+                  decoration: const InputDecoration(
+                    labelText: 'Start date (yyyy-MM-dd)',
                   ),
                 ),
               ],
@@ -38,22 +154,31 @@ class EditExpenseForm extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: const <Widget>[
+              children: [
                 Expanded(
                   flex: 1,
                   child: ElevatedButton(
-                    onPressed: null,
-                    child: Text("Cancel"),
+                    onPressed: widget._onCancelPressed,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 171, 46, 24),
+                    ),
+                    child: const Text('Cancel'),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 8,
                 ),
                 Expanded(
                   flex: 1,
                   child: ElevatedButton(
-                    onPressed: null,
-                    child: Text("Apply"),
+                    onPressed: expenseConsumer(
+                      widget._onApplyPressed,
+                      expense,
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 25, 159, 25),
+                    ),
+                    child: const Text('Apply'),
                   ),
                 ),
               ],
@@ -63,4 +188,13 @@ class EditExpenseForm extends StatelessWidget {
       ),
     );
   }
+}
+
+void Function()? expenseConsumer(
+  void Function(Expense)? expenseConsumer,
+  Expense? expense,
+) {
+  return (expenseConsumer != null && expense != null)
+      ? () => expenseConsumer(expense)
+      : null;
 }

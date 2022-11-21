@@ -1,4 +1,4 @@
-import 'package:big_bucks_app/blocs/expenses/expenses_cubit.dart';
+import 'package:big_bucks_app/blocs/expense_list/expenses_cubit.dart';
 import 'package:big_bucks_app/components/containers/expense_list_container.dart';
 import 'package:big_bucks_app/components/pages/edit_expense_page.dart';
 import 'package:big_bucks_app/components/pages/expense_list_page.dart';
@@ -31,7 +31,7 @@ class BigBucksApp extends StatelessWidget {
     _expenseRepository.add(Expense(
       name: "Groceries",
       value: 300,
-      recurrence: Recurrence.monthly,
+      recurrence: Recurrence.daily,
       startDate: DateTime.now(),
     ));
   }
@@ -40,7 +40,7 @@ class BigBucksApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return ExpensesCubit(_expenseRepository)..getAllExpenses();
+        return ExpenseListCubit(_expenseRepository)..getAllExpenses();
       },
       child: MaterialApp(
         title: 'BIG BUCK\$',

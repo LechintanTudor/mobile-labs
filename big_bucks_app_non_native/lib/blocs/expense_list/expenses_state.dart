@@ -3,17 +3,17 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
 @immutable
-class ExpensesState extends Equatable {
+class ExpenseListState extends Equatable {
   final List<Expense> expenses;
   final int selectedExpenseId;
 
-  const ExpensesState({
+  const ExpenseListState({
     this.expenses = const <Expense>[],
-    this.selectedExpenseId = 1,
+    this.selectedExpenseId = 0,
   });
 
-  ExpensesState copyWith({List<Expense>? expenses, int? selectedExpenseId}) {
-    return ExpensesState(
+  ExpenseListState copyWith({List<Expense>? expenses, int? selectedExpenseId}) {
+    return ExpenseListState(
       expenses: expenses ?? this.expenses,
       selectedExpenseId: selectedExpenseId ?? this.selectedExpenseId,
     );
@@ -23,6 +23,12 @@ class ExpensesState extends Equatable {
   List<Object?> get props => [expenses, selectedExpenseId];
 
   Expense? findSelectedExpense() {
-    return expenses.firstWhere((expense) => expense.id == selectedExpenseId);
+    for (var expense in expenses) {
+      if (expense.id == selectedExpenseId) {
+        return expense;
+      }
+    }
+
+    return null;
   }
 }

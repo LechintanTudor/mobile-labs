@@ -1,5 +1,5 @@
-import 'package:big_bucks_app/blocs/expenses/expenses_cubit.dart';
-import 'package:big_bucks_app/blocs/expenses/expenses_state.dart';
+import 'package:big_bucks_app/blocs/expense_list/expenses_cubit.dart';
+import 'package:big_bucks_app/blocs/expense_list/expenses_state.dart';
 import 'package:big_bucks_app/components/presentational/edit_expense_form.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,10 +9,18 @@ class EditExpenseFormContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ExpensesCubit, ExpensesState>(
+    return BlocBuilder<ExpenseListCubit, ExpenseListState>(
       builder: (context, state) {
-        var expense = state.findSelectedExpense()!;
-        return EditExpenseForm(expense: expense);
+        return EditExpenseForm(
+          expense: state.findSelectedExpense(),
+          onApplyPressed: (expense) {
+            Navigator.pop(context);
+            context.read<ExpenseListCubit>().updateExpense(expense);
+          },
+          onCancelPressed: () {
+            Navigator.pop(context);
+          },
+        );
       },
     );
   }

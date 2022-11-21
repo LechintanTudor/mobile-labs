@@ -1,5 +1,5 @@
-import 'package:big_bucks_app/blocs/expenses/expenses_cubit.dart';
-import 'package:big_bucks_app/blocs/expenses/expenses_state.dart';
+import 'package:big_bucks_app/blocs/expense_list/expenses_cubit.dart';
+import 'package:big_bucks_app/blocs/expense_list/expenses_state.dart';
 import 'package:big_bucks_app/components/presentational/expense_list.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,18 +9,18 @@ class ExpenseListContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ExpensesCubit, ExpensesState>(
+    return BlocBuilder<ExpenseListCubit, ExpenseListState>(
       builder: (context, state) {
-        var expensesCubit = context.read<ExpensesCubit>();
+        var expenseListCubit = context.read<ExpenseListCubit>();
 
         return ExpenseList(
           expenses: state.expenses,
           selectedExpenseId: state.selectedExpenseId,
           onCardPressed: (expenseId) {
-            expensesCubit.toggleSelectExpenseById(expenseId);
+            expenseListCubit.toggleSelectExpenseById(expenseId);
           },
           onEditPressed: (expenseId) {
-            expensesCubit.selectExpenseById(expenseId);
+            expenseListCubit.selectExpenseById(expenseId);
             Navigator.pushNamed(context, '/edit-expense');
           },
           onDeletePressed: (expenseId) {
