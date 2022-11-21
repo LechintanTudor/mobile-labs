@@ -18,6 +18,12 @@ class ExpenseListContainer extends StatelessWidget {
             var expensesCubit = context.read<ExpensesCubit>();
             expensesCubit.toggleSelectExpenseById(expenseId);
           },
+          onEditPressed: (expenseId) {
+            debugPrint('Edit $expenseId');
+          },
+          onDeletePressed: (expenseId) {
+            debugPrint('Delete $expenseId');
+          },
         );
       },
     );

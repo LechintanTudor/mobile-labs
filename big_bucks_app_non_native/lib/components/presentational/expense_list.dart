@@ -35,9 +35,9 @@ class ExpenseList extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: ExpenseCard(
               expense: expense,
-              onCardPressed: () => _onCardPressed!(expense.id),
-              onEditPressed: () => _onEditPressed!(expense.id),
-              onDeletePressed: () => _onDeletePressed!(expense.id),
+              onCardPressed: expenseIdConsumer(_onCardPressed, expense.id),
+              onEditPressed: expenseIdConsumer(_onEditPressed, expense.id),
+              onDeletePressed: expenseIdConsumer(_onDeletePressed, expense.id),
               expanded: expense.id == _selectedExpenseId,
             ),
           );
@@ -50,4 +50,11 @@ class ExpenseList extends StatelessWidget {
       ),
     );
   }
+}
+
+void Function()? expenseIdConsumer(
+  void Function(int expenseId)? expenseIdConsumer,
+  int expenseId,
+) {
+  return expenseIdConsumer != null ? () => expenseIdConsumer(expenseId) : null;
 }

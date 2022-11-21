@@ -100,6 +100,9 @@ class ExpenseCard extends StatelessWidget {
                     flex: 1,
                     child: ElevatedButton(
                       onPressed: _onEditPressed,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 25, 159, 25),
+                      ),
                       child: const Text("Edit"),
                     ),
                   ),
@@ -110,6 +113,9 @@ class ExpenseCard extends StatelessWidget {
                     flex: 1,
                     child: ElevatedButton(
                       onPressed: _onDeletePressed,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 171, 46, 24),
+                      ),
                       child: const Text("Delete"),
                     ),
                   ),
