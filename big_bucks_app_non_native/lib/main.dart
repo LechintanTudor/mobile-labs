@@ -1,4 +1,4 @@
-import 'package:big_bucks_app/blocs/expense_list/expenses_cubit.dart';
+import 'package:big_bucks_app/blocs/expense_list/expense_list_cubit.dart';
 import 'package:big_bucks_app/components/containers/expense_list_container.dart';
 import 'package:big_bucks_app/components/pages/add_expense_page.dart';
 import 'package:big_bucks_app/components/pages/edit_expense_page.dart';
