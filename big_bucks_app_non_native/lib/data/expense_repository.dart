@@ -30,7 +30,7 @@ class ExpenseRepository {
   }
 
   List<Expense> getAll() {
-    return _expenses;
+    return [..._expenses];
   }
 
   bool containsId(int id) {
