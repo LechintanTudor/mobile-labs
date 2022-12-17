@@ -3,7 +3,7 @@ import 'package:big_bucks_app/components/containers/expense_list_container.dart'
 import 'package:big_bucks_app/components/pages/add_expense_page.dart';
 import 'package:big_bucks_app/components/pages/edit_expense_page.dart';
 import 'package:big_bucks_app/components/pages/expense_list_page.dart';
-import 'package:big_bucks_app/data/expense_repository.dart';
+import 'package:big_bucks_app/repository/in_memory/in_memory_expense_repository.dart';
 import 'package:big_bucks_app/model/expense.dart';
 import 'package:big_bucks_app/model/recurrence.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,8 @@ void main() {
 }
 
 class BigBucksApp extends StatelessWidget {
-  final ExpenseRepository _expenseRepository = ExpenseRepository();
+  final InMemoryExpenseRepository _expenseRepository =
+      InMemoryExpenseRepository();
 
   BigBucksApp({super.key}) {
     _expenseRepository.add(Expense(

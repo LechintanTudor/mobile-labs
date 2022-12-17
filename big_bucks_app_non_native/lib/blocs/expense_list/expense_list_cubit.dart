@@ -1,29 +1,29 @@
 import 'package:big_bucks_app/blocs/expense_list/expense_list_state.dart';
-import 'package:big_bucks_app/data/expense_repository.dart';
+import 'package:big_bucks_app/repository/in_memory/in_memory_expense_repository.dart';
 import 'package:big_bucks_app/model/expense.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ExpenseListCubit extends Cubit<ExpenseListState> {
-  final ExpenseRepository _expenseRepository;
+  final InMemoryExpenseRepository _expenseRepository;
 
-  ExpenseListCubit(ExpenseRepository expenseRepository)
+  ExpenseListCubit(InMemoryExpenseRepository expenseRepository)
       : _expenseRepository = expenseRepository,
         super(const ExpenseListState());
 
-  void addExpense(Expense expense) {
-    var newExpense = _expenseRepository.add(expense);
+  Future<void> addExpense(Expense expense) async {
+    var newExpense = await _expenseRepository.add(expense);
     emit(state.copyWith(expenses: [...state.expenses, newExpense]));
   }
 
-  void getAllExpenses() {
+  Future<void> getAllExpenses() async {
     emit(state.copyWith(
-      expenses: _expenseRepository.getAll(),
+      expenses: await _expenseRepository.getAll(),
       selectedExpenseId: null,
     ));
   }
 
-  void updateExpense(Expense expense) {
-    if (_expenseRepository.update(expense)) {
+  Future<void> updateExpense(Expense expense) async {
+    if (await _expenseRepository.update(expense)) {
       var expenses = state.expenses.map(
         (oldExpense) {
           if (oldExpense.id != expense.id) {
@@ -38,10 +38,10 @@ class ExpenseListCubit extends Cubit<ExpenseListState> {
     }
   }
 
-  void deleteExpenseById(int expenseId) {
-    if (_expenseRepository.deleteById(expenseId)) {
-      var expenses = [...state.expenses];
-      expenses.retainWhere((expense) => expense.id != expenseId);
+  Future<void> deleteExpenseById(int expenseId) async {
+    if (await _expenseRepository.deleteById(expenseId)) {
+      var expenses = [...state.expenses]
+        ..retainWhere((expense) => expense.id != expenseId);
 
       var selectedExpenseId =
           state.selectedExpenseId != expenseId ? state.selectedExpenseId : null;
@@ -53,11 +53,11 @@ class ExpenseListCubit extends Cubit<ExpenseListState> {
     }
   }
 
-  void selectExpenseById(int expenseId) {
+  Future<void> selectExpenseById(int expenseId) async {
     emit(state.copyWith(selectedExpenseId: expenseId));
   }
 
-  void toggleSelectExpenseById(int expenseId) {
+  Future<void> toggleSelectExpenseById(int expenseId) async {
     var nextSelectedExpenseId =
         expenseId != state.selectedExpenseId ? expenseId : 0;
 
