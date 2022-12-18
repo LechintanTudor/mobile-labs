@@ -1,5 +1,7 @@
 import 'package:big_bucks_app/model/expense.dart';
 
+class AddExpenseError implements Exception {}
+
 abstract class ExpenseRepository {
   Future<Expense> add(Expense expense);
 

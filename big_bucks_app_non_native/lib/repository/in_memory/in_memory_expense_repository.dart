@@ -2,8 +2,6 @@ import 'package:big_bucks_app/repository/abstract/expense_repository.dart';
 import 'package:big_bucks_app/model/expense.dart';
 import 'package:collection/collection.dart';
 
-class AddExpenseError implements Exception {}
-
 class InMemoryExpenseRepository implements ExpenseRepository {
   final List<Expense> _expenses = [];
   int _lastGeneratedId = 0;

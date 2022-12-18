@@ -1,5 +1,6 @@
 import 'package:big_bucks_app/blocs/expense_list/expense_list_cubit.dart';
 import 'package:big_bucks_app/blocs/expense_list/expense_list_state.dart';
+import 'package:big_bucks_app/components/pages/edit_expense_page.dart';
 import 'package:big_bucks_app/components/presentational/expense_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +22,7 @@ class ExpenseListContainer extends StatelessWidget {
           },
           onEditPressed: (expenseId) {
             expenseListCubit.selectExpenseById(expenseId);
-            Navigator.pushNamed(context, '/edit-expense');
+            Navigator.push(context, EditExpensePage.route());
           },
           onDeletePressed: (expenseId) => showDialog(
             context: context,

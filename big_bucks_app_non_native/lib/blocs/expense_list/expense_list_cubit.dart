@@ -1,12 +1,12 @@
 import 'package:big_bucks_app/blocs/expense_list/expense_list_state.dart';
-import 'package:big_bucks_app/repository/in_memory/in_memory_expense_repository.dart';
+import 'package:big_bucks_app/repository/abstract/expense_repository.dart';
 import 'package:big_bucks_app/model/expense.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ExpenseListCubit extends Cubit<ExpenseListState> {
-  final InMemoryExpenseRepository _expenseRepository;
+  final ExpenseRepository _expenseRepository;
 
-  ExpenseListCubit(InMemoryExpenseRepository expenseRepository)
+  ExpenseListCubit(ExpenseRepository expenseRepository)
       : _expenseRepository = expenseRepository,
         super(const ExpenseListState());
 

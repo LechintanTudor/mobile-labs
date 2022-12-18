@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 class AddExpensePage extends StatelessWidget {
   const AddExpensePage({super.key});
 
+  static Route route() {
+    return MaterialPageRoute(builder: (context) => const AddExpensePage());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

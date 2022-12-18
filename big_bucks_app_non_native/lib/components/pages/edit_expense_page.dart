@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 class EditExpensePage extends StatelessWidget {
   const EditExpensePage({super.key});
 
+  static Route route() {
+    return MaterialPageRoute(builder: (context) => const EditExpensePage());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

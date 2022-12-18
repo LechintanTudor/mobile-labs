@@ -1,4 +1,5 @@
 import 'package:big_bucks_app/components/containers/expense_list_container.dart';
+import 'package:big_bucks_app/components/pages/add_expense_page.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseListPage extends StatelessWidget {
@@ -13,8 +14,10 @@ class ExpenseListPage extends StatelessWidget {
       ),
       body: const ExpenseListContainer(),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green,
+        elevation: 10,
         onPressed: () {
-          Navigator.pushNamed(context, '/add-expense');
+          Navigator.push(context, AddExpensePage.route());
         },
         child: const Icon(Icons.add),
       ),
