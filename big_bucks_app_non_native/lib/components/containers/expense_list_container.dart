@@ -14,36 +14,65 @@ class ExpenseListContainer extends StatelessWidget {
       builder: (context, state) {
         var expenseListCubit = context.read<ExpenseListCubit>();
 
-        return ExpenseList(
-          expenses: state.expenses,
-          selectedExpenseId: state.selectedExpenseId,
-          onCardPressed: (expenseId) {
-            expenseListCubit.toggleSelectExpenseById(expenseId);
-          },
-          onEditPressed: (expenseId) {
-            expenseListCubit.selectExpenseById(expenseId);
-            Navigator.push(context, EditExpensePage.route());
-          },
-          onDeletePressed: (expenseId) => showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text('Delete expense #$expenseId?'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('CANCEL'),
+        if (state.isOk()) {
+          return ExpenseList(
+            expenses: state.expenses,
+            selectedExpenseId: state.selectedExpenseId,
+            onCardPressed: (expenseId) {
+              expenseListCubit.toggleSelectExpenseById(expenseId);
+            },
+            onEditPressed: (expenseId) {
+              expenseListCubit.selectExpenseById(expenseId);
+              Navigator.push(context, EditExpensePage.route());
+            },
+            onDeletePressed: (expenseId) => showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text('Delete expense #$expenseId?'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('CANCEL'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      expenseListCubit.deleteExpenseById(expenseId);
+                      Navigator.pop(context);
+                    },
+                    child: const Text('DELETE'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Failed to perform operation: ${state.lastError}',
+                  textAlign: TextAlign.justify,
+                  style: const TextStyle(
+                    color: Colors.red,
+                    fontSize: 24,
+                  ),
                 ),
-                TextButton(
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(120, 40),
+                    backgroundColor: Colors.green,
+                  ),
                   onPressed: () {
-                    expenseListCubit.deleteExpenseById(expenseId);
-                    Navigator.pop(context);
+                    expenseListCubit.clearLastError();
                   },
-                  child: const Text('DELETE'),
-                ),
+                  child: const Text('Return'),
+                )
               ],
             ),
-          ),
-        );
+          );
+        }
       },
     );
   }

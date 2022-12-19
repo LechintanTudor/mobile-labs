@@ -11,53 +11,74 @@ class ExpenseListCubit extends Cubit<ExpenseListState> {
         super(const ExpenseListState());
 
   Future<void> addExpense(Expense expense) async {
-    var newExpense = await _expenseRepository.add(expense);
-    emit(state.copyWith(expenses: [...state.expenses, newExpense]));
+    try {
+      var newExpense = await _expenseRepository.add(expense);
+      emit(state.copyWith(expenses: [...state.expenses, newExpense]));
+    } catch (error) {
+      emit(state.copyWith(lastError: error.toString()));
+    }
   }
 
   Future<void> getAllExpenses() async {
-    emit(state.copyWith(
-      expenses: await _expenseRepository.getAll(),
-      selectedExpenseId: null,
-    ));
+    try {
+      emit(state.copyWith(
+        expenses: await _expenseRepository.getAll(),
+        selectedExpenseId: null,
+      ));
+    } catch (error) {
+      emit(state.copyWith(lastError: error.toString()));
+    }
   }
 
   Future<void> updateExpense(Expense expense) async {
-    if (await _expenseRepository.update(expense)) {
-      var expenses = state.expenses.map(
-        (oldExpense) {
-          if (oldExpense.id != expense.id) {
-            return oldExpense;
-          } else {
-            return expense;
-          }
-        },
-      ).toList();
+    try {
+      if (await _expenseRepository.update(expense)) {
+        var expenses = state.expenses.map(
+          (oldExpense) {
+            if (oldExpense.id != expense.id) {
+              return oldExpense;
+            } else {
+              return expense;
+            }
+          },
+        ).toList();
 
-      emit(state.copyWith(expenses: expenses));
+        emit(state.copyWith(expenses: expenses));
+      }
+    } catch (error) {
+      emit(state.copyWith(lastError: error.toString()));
     }
   }
 
   Future<void> deleteExpenseById(int expenseId) async {
-    if (await _expenseRepository.deleteById(expenseId)) {
-      var expenses = [...state.expenses]
-        ..retainWhere((expense) => expense.id != expenseId);
+    try {
+      if (await _expenseRepository.deleteById(expenseId)) {
+        var expenses = [...state.expenses]
+          ..retainWhere((expense) => expense.id != expenseId);
 
-      var selectedExpenseId =
-          state.selectedExpenseId != expenseId ? state.selectedExpenseId : null;
+        var selectedExpenseId = state.selectedExpenseId != expenseId
+            ? state.selectedExpenseId
+            : null;
 
-      emit(state.copyWith(
-        expenses: expenses,
-        selectedExpenseId: selectedExpenseId,
-      ));
+        emit(state.copyWith(
+          expenses: expenses,
+          selectedExpenseId: selectedExpenseId,
+        ));
+      }
+    } catch (error) {
+      emit(state.copyWith(lastError: error.toString()));
     }
   }
 
-  Future<void> selectExpenseById(int expenseId) async {
+  void clearLastError() {
+    emit(state.copyWith(lastError: ''));
+  }
+
+  void selectExpenseById(int expenseId) {
     emit(state.copyWith(selectedExpenseId: expenseId));
   }
 
-  Future<void> toggleSelectExpenseById(int expenseId) async {
+  void toggleSelectExpenseById(int expenseId) {
     var nextSelectedExpenseId =
         expenseId != state.selectedExpenseId ? expenseId : 0;
 
