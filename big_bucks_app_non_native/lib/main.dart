@@ -1,5 +1,5 @@
 import 'package:big_bucks_app/blocs/expense_list/expense_list_cubit.dart';
-import 'package:big_bucks_app/components/pages/expense_list_page.dart';
+import 'package:big_bucks_app/components/pages/log_in_page.dart';
 import 'package:big_bucks_app/repository/abstract/expense_repository.dart';
 import 'package:big_bucks_app/repository/local_db/local_db_expense_repository.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ import 'package:sqflite/sqflite.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  var databasePath = path.join(await getDatabasesPath(), 'big_bucks.db');
+  var databasePath = path.join(await getDatabasesPath(), 'big_bucks_new.db');
   var database = await openDatabase(databasePath);
   var expenseRepository = LocalDbExpenseRepository(database: database);
   await expenseRepository.setUpDatabase();
@@ -34,7 +34,7 @@ class BigBucksApp extends StatelessWidget {
       },
       child: const MaterialApp(
         title: 'BIG BUCK\$',
-        home: ExpenseListPage(),
+        home: LogInPage(),
       ),
     );
   }

@@ -6,16 +6,16 @@ import 'package:intl/intl.dart';
 class ExpenseCard extends StatelessWidget {
   final Expense _expense;
   final bool _expanded;
-  final void Function()? _onCardPressed;
-  final void Function()? _onEditPressed;
-  final void Function()? _onDeletePressed;
+  final void Function() _onCardPressed;
+  final void Function() _onEditPressed;
+  final void Function() _onDeletePressed;
 
   const ExpenseCard({
     super.key,
     required Expense expense,
-    void Function()? onCardPressed,
-    void Function()? onEditPressed,
-    void Function()? onDeletePressed,
+    required void Function() onCardPressed,
+    required void Function() onEditPressed,
+    required void Function() onDeletePressed,
     bool expanded = false,
   })  : _expense = expense,
         _onCardPressed = onCardPressed,

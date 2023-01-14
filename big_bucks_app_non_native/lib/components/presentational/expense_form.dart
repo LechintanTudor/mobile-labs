@@ -1,3 +1,4 @@
+import 'package:big_bucks_app/global/formats.dart';
 import 'package:big_bucks_app/model/expense.dart';
 import 'package:big_bucks_app/model/recurrence.dart';
 import 'package:flutter/material.dart';
@@ -6,14 +7,14 @@ import 'package:intl/intl.dart';
 
 class ExpenseForm extends StatefulWidget {
   final Expense? _expense;
-  final void Function(Expense expense)? _onApplyPressed;
-  final void Function()? _onCancelPressed;
+  final void Function(Expense expense) _onApplyPressed;
+  final void Function() _onCancelPressed;
 
   const ExpenseForm({
     super.key,
     Expense? expense,
-    void Function(Expense expense)? onApplyPressed,
-    void Function()? onCancelPressed,
+    required void Function(Expense expense) onApplyPressed,
+    required void Function() onCancelPressed,
   })  : _expense = expense,
         _onApplyPressed = onApplyPressed,
         _onCancelPressed = onCancelPressed;
@@ -33,12 +34,11 @@ class ExpenseFormState extends State<ExpenseForm> {
     super.initState();
 
     var expense = widget._expense;
-    var dateFormat = DateFormat('yyyy-MM-dd');
-
     _name = expense?.name ?? '';
     _valueStr = expense?.value.toString() ?? '0';
     _recurrence = expense?.recurrence ?? Recurrence.oneTime;
-    _startDateStr = dateFormat.format(expense?.startDate ?? DateTime.now());
+    _startDateStr =
+        globalDateFormat.format(expense?.startDate ?? DateTime.now());
   }
 
   Expense? _getExpense() {
@@ -171,10 +171,11 @@ class ExpenseFormState extends State<ExpenseForm> {
                 Expanded(
                   flex: 1,
                   child: ElevatedButton(
-                    onPressed: expenseConsumer(
-                      widget._onApplyPressed,
-                      expense,
-                    ),
+                    onPressed: () {
+                      if (expense != null) {
+                        widget._onApplyPressed(expense);
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 25, 159, 25),
                     ),
@@ -188,13 +189,4 @@ class ExpenseFormState extends State<ExpenseForm> {
       ),
     );
   }
-}
-
-void Function()? expenseConsumer(
-  void Function(Expense)? expenseConsumer,
-  Expense? expense,
-) {
-  return (expenseConsumer != null && expense != null)
-      ? () => expenseConsumer(expense)
-      : null;
 }
