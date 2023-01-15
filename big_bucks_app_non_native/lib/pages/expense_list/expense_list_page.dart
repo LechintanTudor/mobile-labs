@@ -1,4 +1,6 @@
 import 'package:big_bucks_app/components/expense_card.dart';
+import 'package:big_bucks_app/pages/add_expense/add_expense_page.dart';
+import 'package:big_bucks_app/pages/edit_expense/edit_expense_page.dart';
 import 'package:big_bucks_app/pages/expense_list/cubit/expense_list_cubit.dart';
 import 'package:big_bucks_app/pages/expense_list/cubit/expense_list_state.dart';
 import 'package:big_bucks_app/repository/abstract/expense_repository.dart';
@@ -45,8 +47,42 @@ class ExpenseListPage extends StatelessWidget {
                   onCardPressed: () {
                     expenseListCubit.toggleSelectExpenseById(expense.id);
                   },
-                  onEditPressed: () {},
-                  onDeletePressed: () {},
+                  onEditPressed: () {
+                    Navigator.push(
+                      context,
+                      EditExpensePage.route(
+                        expenseListCubit: expenseListCubit,
+                        expense: expense,
+                      ),
+                    );
+                  },
+                  onDeletePressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Delete Expense?'),
+                          content: const Text(
+                              'Are you sure you want to delete this expense?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                expenseListCubit.deleteExpenseById(expense.id);
+                                Navigator.pop(context);
+                              },
+                              child: const Text('DELETE'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('CANCEL'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                   expanded: expense.id == state.selectedExpenseId,
                 );
               },
@@ -54,6 +90,15 @@ class ExpenseListPage extends StatelessWidget {
                 return const SizedBox(height: 8);
               },
             ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                AddExpensePage.route(expenseListCubit: expenseListCubit),
+              );
+            },
+            child: const Icon(Icons.add),
           ),
         );
       },

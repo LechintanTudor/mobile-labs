@@ -24,7 +24,7 @@ class UserService {
       body: jsonEncode(registration.toJson()),
     );
 
-    if (response.statusCode != 204) {
+    if (response.statusCode != 201) {
       throw const UserError('failed to register user');
     }
   }
@@ -36,7 +36,7 @@ class UserService {
       body: jsonEncode(credentials.toJson()),
     );
 
-    if (response.statusCode != 201) {
+    if (response.statusCode != 200) {
       throw const UserError('failed to log in');
     }
 

@@ -57,6 +57,9 @@ class ExpenseDetailView(APIView):
 
         if expense is None:
             return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+            
+        expense_data = JSONParser().parse(request)
+        expense_serializer = ExpenseSerializer(expense, data=expense_data)
 
         if not expense_serializer.is_valid():
             return JsonResponse(

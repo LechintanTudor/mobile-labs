@@ -15,7 +15,7 @@ class ExpenseListCubit extends Cubit<ExpenseListState> {
       var newExpense = await _expenseRepository.add(expense);
       emit(state.copyWith(expenses: [...state.expenses, newExpense]));
     } catch (error) {
-      emit(state.copyWith(lastError: error.toString()));
+      emit(state.copyWith(error: error.toString()));
     }
   }
 
@@ -26,7 +26,7 @@ class ExpenseListCubit extends Cubit<ExpenseListState> {
         selectedExpenseId: null,
       ));
     } catch (error) {
-      emit(state.copyWith(lastError: error.toString()));
+      emit(state.copyWith(error: error.toString()));
     }
   }
 
@@ -46,7 +46,7 @@ class ExpenseListCubit extends Cubit<ExpenseListState> {
         emit(state.copyWith(expenses: expenses));
       }
     } catch (error) {
-      emit(state.copyWith(lastError: error.toString()));
+      emit(state.copyWith(error: error.toString()));
     }
   }
 
@@ -66,12 +66,12 @@ class ExpenseListCubit extends Cubit<ExpenseListState> {
         ));
       }
     } catch (error) {
-      emit(state.copyWith(lastError: error.toString()));
+      emit(state.copyWith(error: error.toString()));
     }
   }
 
   void clearLastError() {
-    emit(state.copyWith(lastError: ''));
+    emit(state.copyWith(error: ''));
   }
 
   void selectExpenseById(int expenseId) {

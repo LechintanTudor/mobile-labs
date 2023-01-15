@@ -25,17 +25,12 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<RegisterCubit, RegisterState>(
       listener: (context, state) {
+        debugPrint('${state.success}');
+
         if (state.success) {
-          showSuccessDialog(context);
           Navigator.pop(context);
         } else if (state.error != '') {
-          showDialog(
-            context: context,
-            builder: (context) => showErrorDialog(
-              context,
-              error: state.error,
-            ),
-          );
+          _showErrorDialog(context, error: state.error);
         }
       },
       builder: (context, state) {
@@ -46,15 +41,13 @@ class RegisterPage extends StatelessWidget {
             backgroundColor: Colors.green,
             title: const Text('Register'),
           ),
-          body: Center(
-            child: UserRegisterForm(
-              onRegisterPressed: (registration) {
-                registerCubit.register(registration);
-              },
-              onCancelPressed: () {
-                Navigator.pop(context);
-              },
-            ),
+          body: UserRegisterForm(
+            onRegisterPressed: (registration) {
+              registerCubit.register(registration);
+            },
+            onCancelPressed: () {
+              Navigator.pop(context);
+            },
           ),
         );
       },
@@ -62,33 +55,39 @@ class RegisterPage extends StatelessWidget {
   }
 }
 
-Widget showSuccessDialog(
+void _showSuccessDialog(
   BuildContext context,
 ) {
-  return AlertDialog(
-    title: const Text('Success'),
-    content: const Text('Registered successfully'),
-    actions: [
-      TextButton(
-        onPressed: () => Navigator.pop(context),
-        child: const Text('OK'),
-      )
-    ],
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Success'),
+      content: const Text('Registered successfully'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('OK'),
+        )
+      ],
+    ),
   );
 }
 
-Widget showErrorDialog(
+void _showErrorDialog(
   BuildContext context, {
   required String error,
 }) {
-  return AlertDialog(
-    title: const Text('Error'),
-    content: Text(error),
-    actions: [
-      TextButton(
-        onPressed: () => Navigator.pop(context),
-        child: const Text('OK'),
-      ),
-    ],
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Error'),
+      content: Text(error),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('OK'),
+        ),
+      ],
+    ),
   );
 }
