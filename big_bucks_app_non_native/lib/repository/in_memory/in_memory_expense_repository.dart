@@ -9,7 +9,7 @@ class InMemoryExpenseRepository implements ExpenseRepository {
   @override
   Future<Expense> add(Expense expense) async {
     if (expense.id != 0) {
-      throw AddExpenseError();
+      throw const ExpenseError('cannot add expense with a non-zero id');
     }
 
     var id = _lastGeneratedId + 1;

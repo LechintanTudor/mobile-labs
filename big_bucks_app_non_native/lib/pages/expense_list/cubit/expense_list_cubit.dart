@@ -1,4 +1,4 @@
-import 'package:big_bucks_app/blocs/expense_list/expense_list_state.dart';
+import 'package:big_bucks_app/pages/expense_list/cubit/expense_list_state.dart';
 import 'package:big_bucks_app/repository/abstract/expense_repository.dart';
 import 'package:big_bucks_app/model/expense.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ExpenseListCubit extends Cubit<ExpenseListState> {
   final ExpenseRepository _expenseRepository;
 
-  ExpenseListCubit(ExpenseRepository expenseRepository)
+  ExpenseListCubit({required ExpenseRepository expenseRepository})
       : _expenseRepository = expenseRepository,
         super(const ExpenseListState());
 

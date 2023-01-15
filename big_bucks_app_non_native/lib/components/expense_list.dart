@@ -1,4 +1,4 @@
-import 'package:big_bucks_app/components/presentational/expense_card.dart';
+import 'package:big_bucks_app/components/expense_card.dart';
 import 'package:big_bucks_app/model/expense.dart';
 import 'package:flutter/material.dart';
 

@@ -1,7 +1,7 @@
+import 'package:big_bucks_app/global/formats.dart';
 import 'package:big_bucks_app/model/expense.dart';
 import 'package:big_bucks_app/model/recurrence.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class ExpenseCard extends StatelessWidget {
   final Expense _expense;
@@ -129,7 +129,7 @@ class ExpenseCard extends StatelessWidget {
 String recurrenceDisplayString(Expense expense) {
   switch (expense.recurrence) {
     case Recurrence.oneTime:
-      return DateFormat("yyyy-MM-dd").format(expense.startDate);
+      return globalDateFormat.format(expense.startDate);
 
     case Recurrence.daily:
       return "daily";

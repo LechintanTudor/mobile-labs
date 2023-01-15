@@ -1,6 +1,7 @@
 import 'package:big_bucks_app/repository/abstract/expense_repository.dart';
 import 'package:big_bucks_app/model/expense.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart' as path;
 
 class LocalDbExpenseRepository extends ExpenseRepository {
   static const expenseTable = 'expense';
@@ -24,6 +25,15 @@ class LocalDbExpenseRepository extends ExpenseRepository {
 
   LocalDbExpenseRepository({required Database database}) : _database = database;
 
+  static Future<LocalDbExpenseRepository> create() async {
+    var databasePath = path.join(await getDatabasesPath(), 'big_bucks_new.db');
+    var database = await openDatabase(databasePath);
+
+    var expenseRepository = LocalDbExpenseRepository(database: database);
+    await expenseRepository.setUpDatabase();
+    return expenseRepository;
+  }
+
   Future<void> setUpDatabase() async {
     await _database.execute('''
       CREATE TABLE IF NOT EXISTS $expenseTable (
@@ -40,7 +50,7 @@ class LocalDbExpenseRepository extends ExpenseRepository {
   @override
   Future<Expense> add(Expense expense) async {
     if (expense.id != 0) {
-      throw AddExpenseError();
+      throw const ExpenseError('failed to add expense');
     }
 
     var expenseObject = expense.toJson()..remove(idColumn);

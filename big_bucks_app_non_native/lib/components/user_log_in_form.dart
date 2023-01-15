@@ -7,13 +7,16 @@ class UserLogInForm extends StatelessWidget {
 
   final void Function(UserCredentials credentials) _onLogInPressed;
   final void Function() _onRegisterPressed;
+  final void Function() _onUseOfflinePressed;
 
   UserLogInForm({
     super.key,
     required void Function(UserCredentials credentials) onLogInPressed,
     required void Function() onRegisterPressed,
+    required void Function() onUseOfflinePressed,
   })  : _onLogInPressed = onLogInPressed,
-        _onRegisterPressed = onRegisterPressed;
+        _onRegisterPressed = onRegisterPressed,
+        _onUseOfflinePressed = onUseOfflinePressed;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +48,10 @@ class UserLogInForm extends StatelessWidget {
                 onPressed: _onRegisterPressed,
                 child: const Text('Register'),
               ),
+              ElevatedButton(
+                onPressed: _onUseOfflinePressed,
+                child: const Text('Use offline'),
+              )
             ],
           ),
         ),

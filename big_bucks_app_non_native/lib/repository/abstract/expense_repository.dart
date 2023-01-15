@@ -1,8 +1,19 @@
 import 'package:big_bucks_app/model/expense.dart';
 
-class AddExpenseError implements Exception {}
+class ExpenseError implements Exception {
+  final String message;
+
+  const ExpenseError(this.message);
+
+  @override
+  String toString() {
+    return 'ExpenseError: $message';
+  }
+}
 
 abstract class ExpenseRepository {
+  const ExpenseRepository();
+
   Future<Expense> add(Expense expense);
 
   Future<Expense?> getById(int expenseId);
