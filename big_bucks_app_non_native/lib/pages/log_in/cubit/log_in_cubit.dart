@@ -18,7 +18,7 @@ class LogInCubit extends Cubit<LogInState> {
       var expenseRepository = HttpExpenseRepository(token: logInResponse.token);
       emit(LogInState(expenseRepository: expenseRepository));
     } catch (error) {
-      emit(const LogInState(expenseRepository: null));
+      emit(LogInState(expenseRepository: null, error: error.toString()));
     }
   }
 

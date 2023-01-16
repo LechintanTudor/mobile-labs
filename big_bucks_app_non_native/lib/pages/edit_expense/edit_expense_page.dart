@@ -11,7 +11,6 @@ class EditExpensePage extends StatelessWidget {
   const EditExpensePage({super.key, required Expense expense})
       : _expense = expense;
 
-  @override
   static Route route({
     required ExpenseListCubit expenseListCubit,
     required Expense expense,

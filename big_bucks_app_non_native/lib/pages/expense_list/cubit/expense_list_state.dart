@@ -5,11 +5,13 @@ class ExpenseListState extends Equatable {
   final List<Expense> expenses;
   final int selectedExpenseId;
   final String error;
+  final bool isOnline;
 
   const ExpenseListState({
     this.expenses = const <Expense>[],
     this.selectedExpenseId = 0,
     this.error = '',
+    required this.isOnline,
   });
 
   ExpenseListState copyWith({
@@ -21,6 +23,7 @@ class ExpenseListState extends Equatable {
       expenses: expenses ?? this.expenses,
       selectedExpenseId: selectedExpenseId ?? this.selectedExpenseId,
       error: error,
+      isOnline: isOnline,
     );
   }
 

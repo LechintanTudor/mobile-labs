@@ -10,6 +10,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class LogInPage extends StatelessWidget {
   const LogInPage({super.key});
 
+  static Route route() {
+    return MaterialPageRoute(
+      builder: (context) {
+        return BlocProvider(
+          create: (context) {
+            var userService = RepositoryProvider.of<UserService>(context);
+            return LogInCubit(userService: userService);
+          },
+          child: const LogInPage(),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LogInCubit, LogInState>(
@@ -17,8 +31,28 @@ class LogInPage extends StatelessWidget {
         if (state.expenseRepository != null) {
           Navigator.pushAndRemoveUntil(
             context,
-            ExpenseListPage.route(expenseRepository: state.expenseRepository!),
+            ExpenseListPage.route(
+              expenseRepository: state.expenseRepository!,
+              isOnline: state.isOnline,
+            ),
             (route) => false,
+          );
+        } else if (state.error != '') {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('Failed to log in'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
           );
         }
       },

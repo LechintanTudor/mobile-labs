@@ -1,8 +1,10 @@
 import 'package:big_bucks_app/components/expense_card.dart';
+import 'package:big_bucks_app/global/cubit/auth_cubit.dart';
 import 'package:big_bucks_app/pages/add_expense/add_expense_page.dart';
 import 'package:big_bucks_app/pages/edit_expense/edit_expense_page.dart';
 import 'package:big_bucks_app/pages/expense_list/cubit/expense_list_cubit.dart';
 import 'package:big_bucks_app/pages/expense_list/cubit/expense_list_state.dart';
+import 'package:big_bucks_app/pages/log_in/log_in_page.dart';
 import 'package:big_bucks_app/repository/abstract/expense_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,12 +14,15 @@ class ExpenseListPage extends StatelessWidget {
 
   static Route route({
     required ExpenseRepository expenseRepository,
+    required bool isOnline,
   }) {
     return MaterialPageRoute(
       builder: (context) => BlocProvider(
         create: (context) {
-          return ExpenseListCubit(expenseRepository: expenseRepository)
-            ..getAllExpenses();
+          return ExpenseListCubit(
+            expenseRepository: expenseRepository,
+            isOnline: isOnline,
+          )..getAllExpenses();
         },
         child: const ExpenseListPage(),
       ),
@@ -34,6 +39,49 @@ class ExpenseListPage extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: Colors.green,
             title: const Text('Expenses'),
+            actions: [
+              TextButton(
+                onPressed: () {},
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.exit_to_app,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Log Out?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                if (state.isOnline) {
+                                  context.read<AuthCubit>().logOut();
+                                }
+
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  LogInPage.route(),
+                                  (route) => false,
+                                );
+                              },
+                              child: const Text('YES'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('NO'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+              )
+            ],
           ),
           body: Padding(
             padding: const EdgeInsets.all(8),

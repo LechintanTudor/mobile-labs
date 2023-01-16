@@ -55,24 +55,6 @@ class RegisterPage extends StatelessWidget {
   }
 }
 
-void _showSuccessDialog(
-  BuildContext context,
-) {
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: const Text('Success'),
-      content: const Text('Registered successfully'),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('OK'),
-        )
-      ],
-    ),
-  );
-}
-
 void _showErrorDialog(
   BuildContext context, {
   required String error,
